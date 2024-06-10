@@ -1,14 +1,20 @@
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
-import {ScrollView, StyleSheet, Text, View, processColor} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, processColor, ProcessedColorValue} from 'react-native';
 import {BarChart} from 'react-native-charts-wrapper';
 import {AddDebtModal} from './organisms';
+import {ResultsModal} from './organisms/modals/ResultsModal';
+
+
 
 import {Picker} from '@react-native-picker/picker';
 import globalStyles from '../globalStyles';
 
 import {GradientBG, GradientButton} from './atoms';
 import GradientPickerItem from './atoms/GradientPickerItem';
+
+
+
 
 type Props = {
   readonly navigation: NativeStackNavigationProp<any, any>;
@@ -26,15 +32,23 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
     {label: 'Anual', value: 'year'},
   ];
   const [timeRateValue, setTimeRateValue] = React.useState('');
+  const [resultsModalVisible, setResultsModalVisible] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
-  // const [values, setValues] = React.useState<BarValue[]>([]);
-  // const [colors, setColors] = React.useState<ProcessedColorValue[]>([]);
+  const [values, setValues] = React.useState<{x: number, y: number, marker: string}[]>([]);
+  const [colors, setColors] = React.useState<ProcessedColorValue[]>([]);
 
-  // const addAmount = (debt: {x: number; y: number}) => {
-  //   setValues([...values, {x: debt.x, y: debt.y, marker: String(debt.x)}]);
-  //   setColors([...colors, processColor('red') as ProcessedColorValue]);
-  // };
-
+  const addAmount = (amount: number, type: number, period: number) => {
+    const newValue = {x: period, y: amount * type, marker: String(period)};
+    const newColor = processColor(type === -1 ? 'red' : 'green') as ProcessedColorValue;
+    setValues(prevValues => [...prevValues, newValue]);
+    setColors(prevColors => [...prevColors, newColor]);
+  };
+  const removeBar = () => {
+    if (values.length > 0 && colors.length > 0) {
+      setValues(values.slice(0, -1));
+      setColors(colors.slice(0, -1));
+    }
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.titleContainer}>
@@ -83,24 +97,10 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
           data={{
             dataSets: [
               {
-                values: [
-                  {x: 1, y: -224, marker: '1'},
-                  {x: 3, y: 238, marker: '3'},
-                  {x: 9, y: 1280, marker: '9'},
-                  {x: 10, y: -442, marker: '10'},
-                  {x: 12, y: 2280, marker: '12'},
-                  {x: 15, y: -1742, marker: '15'},
-                ],
+                values,
                 label: 'Deudas y Pagos',
                 config: {
-                  colors: [
-                    processColor('red'),
-                    processColor('green'),
-                    processColor('green'),
-                    processColor('red'),
-                    processColor('green'),
-                    processColor('red'),
-                  ],
+                  colors,
                   valueTextSize: 12,
                 },
               },
@@ -122,8 +122,17 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
           title="Agregar monto"
           onPress={() => setModalVisible(true)}
         />
-
-        <GradientButton style={styles.button} title="Calcular" />
+         <GradientButton
+          style={styles.button}
+          title="Eliminar Barra"
+          onPress={removeBar}
+        />
+        <GradientButton 
+          style={styles.button} 
+          title="Calcular" 
+          onPress={() => setResultsModalVisible(true)}
+        />
+        
       </View>
       <View style={styles.buttonContainer}>
         <GradientButton
@@ -131,7 +140,6 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
           title="Ver Ejemplos"
           onPress={() => navigation.navigate('Ejemplos')}
         />
-
         <GradientButton
           style={styles.button}
           title="Help"
@@ -139,9 +147,16 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
         />
       </View>
       <AddDebtModal
-        visible={modalVisible}
-        onSubmit={() => setModalVisible(false)}
-        onClose={() => setModalVisible(false)}
+          visible={modalVisible}
+          onSubmit={(amount, type, period) => {
+            addAmount(amount, type, period);
+            setModalVisible(false);
+          }}
+          onClose={() => setModalVisible(false)}
+        />
+        <ResultsModal
+        visible={resultsModalVisible}
+        onClose={() => setResultsModalVisible(false)}
       />
     </ScrollView>
   );
@@ -176,6 +191,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     margin: 8,
+    
   },
 });
 

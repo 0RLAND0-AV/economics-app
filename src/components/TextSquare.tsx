@@ -1,5 +1,6 @@
 import React from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
+import {GradientButton} from './atoms/GradientButton'; // Importa el componente GradientButton
 
 // Definición de las props que recibe el componente TextSquare
 interface TextSquareProps {
@@ -18,7 +19,18 @@ export function TextSquare({
       <Text style={styles.content}>{content}</Text>
 
       <View style={styles.buttonContainer}>
-        <Button title="Colocar" onPress={() => {}} />
+        <GradientButton
+          title="Colocar"
+          onPress={() => {}}
+          style={{
+            color: 'white', 
+            width: 80, 
+            height: 30, // Añade el ancho del borde aquí
+            borderColor: '#0399b0', // Añade el color del borde aquí
+            borderRadius: 10, // Añade el radio del borde aquí
+          }}
+          color={['#0399b0', '#7ad75a']} // Agrega los colores del gradiente aquí
+        />
       </View>
     </View>
   );

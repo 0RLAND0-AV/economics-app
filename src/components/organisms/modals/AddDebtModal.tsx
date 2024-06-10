@@ -1,13 +1,14 @@
 import {Picker} from '@react-native-picker/picker';
 import {Theme, useTheme} from '@react-navigation/native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Modal, StyleSheet, Text, TextInput, View} from 'react-native';
 import globalStyles from '../../../globalStyles';
 import {GradientBG, GradientButton} from '../../atoms';
+import {TouchableWithoutFeedback} from 'react-native';
 
 type Props = {
   visible: boolean;
-  onSubmit: () => void;
+  onSubmit: (amount: number, type: number, period: number) => void;
   onClose: () => void;
 };
 
@@ -15,8 +16,11 @@ export const AddDebtModal: React.FC<Props> = ({visible, onSubmit, onClose}) => {
   const theme = useTheme();
   const styles = getLocalStyle({theme});
 
-  const [typeValue, setTypeValue] = React.useState(1);
-  const [timeValue, setTimeValue] = React.useState(1);
+  const [typeValue, setTypeValue] = useState(1);
+  const [amountValue, setAmountValue] = useState('');
+  const [periodValue, setPeriodValue] = useState(''); 
+  const [timeValue, setTimeValue] = useState(1); 
+
   return (
     <Modal
       animationType="fade"
@@ -25,7 +29,7 @@ export const AddDebtModal: React.FC<Props> = ({visible, onSubmit, onClose}) => {
       onRequestClose={onClose}>
       <View style={styles.container}>
         <View style={styles.modalContent}>
-          <Text style={styles.title}>Agregar Monto</Text>
+          <Text style={styles.title}>Agregar </Text>
           <View style={styles.formContainer}>
             <View style={styles.formGroup}>
               <GradientBG style={styles.input}>
@@ -34,6 +38,8 @@ export const AddDebtModal: React.FC<Props> = ({visible, onSubmit, onClose}) => {
                   style={styles.textInput}
                   placeholder="Monto"
                   keyboardType="numeric"
+                  value={amountValue}
+                  onChangeText={setAmountValue}
                 />
               </GradientBG>
               <GradientBG style={styles.input}>
@@ -54,6 +60,8 @@ export const AddDebtModal: React.FC<Props> = ({visible, onSubmit, onClose}) => {
                   style={styles.textInput}
                   placeholder="Periodo"
                   keyboardType="numeric"
+                  value={periodValue}
+                  onChangeText={setPeriodValue}
                 />
               </GradientBG>
               <GradientBG style={styles.input}>
@@ -68,12 +76,11 @@ export const AddDebtModal: React.FC<Props> = ({visible, onSubmit, onClose}) => {
               </GradientBG>
             </View>
           </View>
-
           <GradientButton
-            style={styles.button}
-            title="Agregar"
-            onPress={onSubmit}
-          />
+             style={styles.button}
+             title="Agregar"
+             onPress={() => onSubmit(Number(amountValue), typeValue, Number(periodValue))}
+           />
         </View>
       </View>
     </Modal>
