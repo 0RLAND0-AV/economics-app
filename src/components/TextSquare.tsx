@@ -32,6 +32,7 @@ export function TextSquare({
           color={['#0399b0', '#7ad75a']} // Agrega los colores del gradiente aquí
         />
       </View>
+      
     </View>
   );
 }

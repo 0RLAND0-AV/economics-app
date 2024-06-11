@@ -48,8 +48,8 @@ export const AddDebtModal: React.FC<Props> = ({visible, onSubmit, onClose}) => {
                   onValueChange={setTypeValue}
                   mode="dropdown"
                   style={styles.textInput}>
-                  <Picker.Item label="Deuda" value={-1} />
-                  <Picker.Item label="Inversion" value={1} />
+                  <Picker.Item label="Egresos" value={-1} />
+                  <Picker.Item label="Ingresos" value={1} />
                 </Picker>
               </GradientBG>
             </View>
@@ -62,20 +62,10 @@ export const AddDebtModal: React.FC<Props> = ({visible, onSubmit, onClose}) => {
                   keyboardType="numeric"
                   value={periodValue}
                   onChangeText={setPeriodValue}
-                />
-              </GradientBG>
-              <GradientBG style={styles.input}>
-                <Picker
-                  selectedValue={timeValue}
-                  onValueChange={setTimeValue}
-                  mode="dropdown"
-                  style={styles.textInput}>
-                  <Picker.Item label="Antes" value={-1} />
-                  <Picker.Item label="Despues" value={1} />
-                </Picker>
-              </GradientBG>
-            </View>
-          </View>
+                  />
+                  </GradientBG>
+                 </View>
+               </View>
           <GradientButton
              style={styles.button}
              title="Agregar"

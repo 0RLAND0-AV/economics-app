@@ -7,6 +7,7 @@ import { TouchableWithoutFeedback } from 'react-native';
 type Props = {
   visible: boolean;
   onClose: () => void;
+  
 };
 
 export const ResultsModal: React.FC<Props> = ({visible, onClose}) => {
@@ -23,7 +24,7 @@ export const ResultsModal: React.FC<Props> = ({visible, onClose}) => {
           <View style={styles.modalContent}>
             <Text style={styles.title}>RESULTADOS</Text>
             <View style={styles.resultsContainer}>
-              {['Interes:', 'Periodo:', 'Monto final:', 'Monto inicial:'].map((text, index) => (
+              {['Resultado:'].map((text, index) => (
                 <View key={index} style={styles.row}>
                   <Text style={styles.text}>{text}</Text>
                   <Text style={styles.resultText}>aqui va el resultado</Text>

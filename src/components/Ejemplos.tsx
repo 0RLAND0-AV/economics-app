@@ -76,7 +76,7 @@ export function Ejemplos(): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f0f0', // Gris claro
+    backgroundColor: '#ACDEAA', 
   },
   scrollContainer: {
     paddingVertical: 20,

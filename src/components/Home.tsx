@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   },
   button: {
     ...globalStyles.button,
+    borderRadius: 10, 
     width: 256,
   },
   buttonContainer: {

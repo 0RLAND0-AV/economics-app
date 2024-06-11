@@ -29,6 +29,6 @@ const theme: Theme = {
   dark: true,
   colors: {
     ...DefaultTheme.colors,
-    background: '#F0F0F0',
+    background: '#ACDEAA',
   },
 };

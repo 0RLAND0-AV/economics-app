@@ -4,6 +4,7 @@ import {ScrollView, StyleSheet, Text, View, processColor, ProcessedColorValue} f
 import {BarChart} from 'react-native-charts-wrapper';
 import {AddDebtModal} from './organisms';
 import {ResultsModal} from './organisms/modals/ResultsModal';
+import InputModal from './organisms/modals/InputModal'; // Asegúrate de que la ruta sea correcta
 
 
 
@@ -31,11 +32,16 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
     {label: 'Semestral', value: 'sem'},
     {label: 'Anual', value: 'year'},
   ];
+  const [inputModalVisible, setInputModalVisible] = React.useState(false);
   const [timeRateValue, setTimeRateValue] = React.useState('');
   const [resultsModalVisible, setResultsModalVisible] = React.useState(false);
   const [modalVisible, setModalVisible] = React.useState(false);
-  const [values, setValues] = React.useState<{x: number, y: number, marker: string}[]>([]);
-  const [colors, setColors] = React.useState<ProcessedColorValue[]>([]);
+  const [values, setValues] = React.useState<{x: number, y: number, marker: string}[]>([
+    {x: 0, y: 0, marker: '0'}
+  ]);
+  const [colors, setColors] = React.useState<ProcessedColorValue[]>([
+    processColor('blue') as ProcessedColorValue
+]);
 
   const addAmount = (amount: number, type: number, period: number) => {
     const newValue = {x: period, y: amount * type, marker: String(period)};
@@ -98,7 +104,7 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
             dataSets: [
               {
                 values,
-                label: 'Deudas y Pagos',
+                label: 'Ingresos y Egresos',
                 config: {
                   colors,
                   valueTextSize: 12,
@@ -117,21 +123,24 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
         />
       </View>
       <View style={styles.buttonContainer}>
+      <View style={{ flexDirection: 'row' }}>
         <GradientButton
-          style={styles.button}
-          title="Agregar monto"
-          onPress={() => setModalVisible(true)}
+           style={{ ...styles.button, flex: 1 }}
+           title="Graficar"
+           onPress={() => setModalVisible(true)}
         />
+        <GradientButton
+            style={{ ...styles.button, flex: 1 }}
+            title="Colocar Datos"
+            onPress={() => setInputModalVisible(true)}
+          />
+      </View>
          <GradientButton
           style={styles.button}
           title="Eliminar Barra"
           onPress={removeBar}
         />
-        <GradientButton 
-          style={styles.button} 
-          title="Calcular" 
-          onPress={() => setResultsModalVisible(true)}
-        />
+        
         
       </View>
       <View style={styles.buttonContainer}>
@@ -158,12 +167,20 @@ export function PUCalculator({navigation}: Props): React.JSX.Element {
         visible={resultsModalVisible}
         onClose={() => setResultsModalVisible(false)}
       />
+      <InputModal
+        visible={inputModalVisible}
+        onClose={() => setInputModalVisible(false)}
+      />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   ...globalStyles,
+  button: {
+    ...globalStyles.button,
+    borderRadius: 10, // Añade el borderRadius aquí
+  },
   charts: {
     flex: 1,
     marginVertical: 8,
@@ -191,6 +208,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     margin: 8,
+    
     
   },
 });
